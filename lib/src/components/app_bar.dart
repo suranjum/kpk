@@ -33,7 +33,7 @@ class _KpkAppBarState extends State<KpkAppBar> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.asset('res/kpk-logo.jpg', width: 40, height: 40),
+                child: Image.asset('res/kpk-logo.png', width: 40, height: 40),
               ),
               Expanded(child: const Text(kAppName)),
             ],
