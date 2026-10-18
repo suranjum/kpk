@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kpk/src/components/app_bar.dart';
 import 'package:kpk/src/components/post_card.dart';
 import 'package:kpk/src/helpers/constants.dart';
 import 'package:kpk/src/models/post.dart';
 import 'package:kpk/src/providers/posts_provider.dart';
+import 'package:material_ui/material_ui.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -68,20 +68,29 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           appBar: KpkAppBar(),
-          body: Center(
-            child: SingleChildScrollView(
+          body: SingleChildScrollView(
+            child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: kMaxWidth),
                 child: isDesktop
-                    ? Row(
-                        spacing: 16,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(flex: 2, child: postGrid),
-                          Expanded(flex: 1, child: categoryList),
-                        ],
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          spacing: 16,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(flex: 2, child: postGrid),
+                            Expanded(flex: 1, child: categoryList),
+                          ],
+                        ),
                       )
-                    : Column(spacing: 16, children: [postGrid, categoryList]),
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          spacing: 16,
+                          children: [postGrid, categoryList],
+                        ),
+                      ),
               ),
             ),
           ),

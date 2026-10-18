@@ -27,4 +27,28 @@ class PostsProvider {
       return PostResult([], 0, '$e');
     }
   }
+
+  static Future<PostResult> getById(Map<String, dynamic> post) async {
+    try {
+      String url = kApiEndPoints['post_by_id'] ?? kApiUrl;
+      final response = await http.Client().post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(post),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        final parsed = json.decode(response.body);
+        return PostResult(
+          parsed.map<Post>((json) => Post.fromJson(json)).toList(),
+          0,
+          '',
+        );
+      } else {
+        return PostResult([], 0, response.body);
+      }
+    } catch (e) {
+      return PostResult([], 0, '$e');
+    }
+  }
 }

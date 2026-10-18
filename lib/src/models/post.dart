@@ -7,6 +7,8 @@ class Post {
   String categoryName;
   int numComments;
   String authorName;
+  String content;
+  int commentsCount;
 
   Post(
     this.id,
@@ -17,17 +19,21 @@ class Post {
     this.categoryName,
     this.numComments,
     this.authorName,
+    this.content,
+    this.commentsCount,
   );
 
   Post.fromJson(Map<String, dynamic> json)
-    : id = json['post_id'],
-      title = json['post_title'],
-      featureImage = json['post_feature_img'],
-      visited = json['post_visited'],
-      modified = json['post_modified'],
+    : id = json['post_id'] ?? '',
+      title = json['post_title'] ?? '',
+      featureImage = json['post_feature_img'] ?? '',
+      visited = json['post_visited'] ?? 0,
+      modified = json['post_modified'] ?? '',
       categoryName = json['cg_name'] ?? '',
       numComments = json['ncomments'] ?? 0,
-      authorName = json['author_name'] ?? '';
+      authorName = json['author_name'] ?? '',
+      content = json['post_content'] ?? '',
+      commentsCount = json['ncomments'] ?? 0;
 }
 
 class PostResult {

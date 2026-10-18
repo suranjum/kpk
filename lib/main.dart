@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hornbill/hornbill.dart';
 import 'package:kpk/src/helpers/constants.dart';
 import 'package:kpk/src/helpers/globals.dart' as globals;
 import 'package:kpk/src/pages/content_page.dart';
 import 'package:kpk/src/pages/home_page.dart';
 import 'package:kpk/src/pages/post_page.dart';
 import 'package:kpk/src/providers/pages_provider.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,10 +52,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: kAppName,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent,),
-        textTheme: GoogleFonts.interTextTheme(),
-      ),
+      themeMode: ThemeMode.light,
+      theme: HTheme(colourScheme: HColourScheme.pink).lightTheme(),
+      darkTheme: HTheme(colourScheme: HColourScheme.pink).darkTheme(),
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );

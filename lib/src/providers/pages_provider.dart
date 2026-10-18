@@ -13,6 +13,7 @@ class PagesProvider {
         headers: {'Content-Type': 'application/json'},
         body: '',
       );
+      print(response.body);
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         return PageLinkResult(

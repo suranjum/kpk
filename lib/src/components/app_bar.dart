@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hornbill/hornbill.dart';
 import 'package:kpk/src/helpers/constants.dart';
 import 'package:kpk/src/helpers/globals.dart' as globals;
-import 'package:kpk/src/models/page.dart';
+import 'package:material_ui/material_ui.dart';
 
 class KpkAppBar extends StatefulWidget implements PreferredSizeWidget {
   const KpkAppBar({super.key});
@@ -38,47 +38,69 @@ class _KpkAppBarState extends State<KpkAppBar> {
               Expanded(child: const Text(kAppName)),
             ],
           ),
-          actions: isMobile
-              ? [
-                  PopupMenuButton<PageLink>(
-                    onSelected: (value) {
-                      context.go('/page/${value.slug}');
-                    },
-                    itemBuilder: (context) => <PopupMenuEntry<PageLink>>[
-                      ...globals.pageLinks.map((link) {
-                        return PopupMenuItem<PageLink>(
-                          value: link,
-                          child: Text(link.title),
-                        );
-                      }),
-                    ],
-                    icon: Icon(Icons.menu),
-                  ),
-                ]
-              : [
-                  Row(
-                    children: [
-                      if (constraints.maxWidth > 800)
-                        TextButton(
-                          onPressed: () {
-                            context.go('/');
-                          },
-                          child: Text('Home'),
-                        ),
-                      ...globals.pageLinks.map((link) {
-                        return TextButton(
-                          onPressed: () {
-                            context.go('/page/${link.slug}');
-                          },
-                          child: Text(link.title),
-                        );
-                      }),
-                      SizedBox(width: 10),
-                    ],
-                  ),
+          actions: [
+            if (isMobile)
+              HButton(
+                variant: .light,
+                color: .primary,
+                onPressed: () {
+                  context.go('/');
+                },
+                icon: Icons.home_outlined,
+              ),
+            if (isMobile)
+              HButton(
+                variant: .light,
+                color: .primary,
+                onPressed: _openMenuDialog,
+                icon: Icons.menu,
+              ),
+            if (!isMobile)
+              Row(
+                children: [
+                  if (constraints.maxWidth > 800)
+                    HButton(
+                      variant: .light,
+                      color: .primary,
+                      onPressed: () {
+                        context.go('/');
+                      },
+                      label: Text('Home'),
+                    ),
+                  ...globals.pageLinks.map((link) {
+                    return HButton(
+                      variant: .light,
+                      color: .primary,
+                      onPressed: () {
+                        context.go('/page/${link.slug}');
+                      },
+                      label: Text(link.title),
+                    );
+                  }),
+                  SizedBox(width: 10),
                 ],
+              ),
+          ],
         );
       },
+    );
+  }
+
+  void _openMenuDialog() {
+    showHDialog(
+      context,
+      builder: (context) => HDialog(
+        content: globals.pageLinks.map((link) {
+          return HButton(
+            variant: .light,
+            color: .primary,
+            onPressed: () {
+              context.go('/page/${link.slug}');
+            },
+            label: Text(link.title),
+          );
+        }).toList(),
+      ),
     );
   }
 }

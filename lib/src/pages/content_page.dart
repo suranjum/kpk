@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kpk/src/components/app_bar.dart';
 
 class ContentPage extends StatefulWidget {

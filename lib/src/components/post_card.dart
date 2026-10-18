@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kpk/src/helpers/constants.dart';
 import 'package:kpk/src/helpers/date_helper.dart';
 import 'package:kpk/src/models/post.dart';
