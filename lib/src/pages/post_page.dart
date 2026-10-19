@@ -1,6 +1,7 @@
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:hornbill/hornbill.dart';
 import 'package:kpk/src/components/app_bar.dart';
+import 'package:kpk/src/components/categories_list.dart';
 import 'package:kpk/src/helpers/constants.dart';
 import 'package:kpk/src/helpers/date_helper.dart';
 import 'package:kpk/src/models/comment.dart';
@@ -62,135 +63,166 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: KpkAppBar(),
-      body: error.isNotEmpty
-          ? Center(child: Text(error))
-          : (post == null || post!.id.isEmpty
-                ? Center(child: Text('Unable to fetch post!'))
-                : SingleChildScrollView(
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: kMaxContentWidth),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: .stretch,
-                            spacing: 16,
-                            children: [
-                              HListItemData(
-                                title: Text(
-                                  post!.title,
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: .bold,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  '${post!.categoryName} | ${formatDateStringDDMMMYYYY(post!.modified)}',
-                                ),
-                              ),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(16),
-                                onTap: () {
-                                  final imageUrl =
-                                      '$kImageUrl/${post!.featureImage}';
-                                  showHDialog(
-                                    context,
-                                    builder: (dialogContext) {
-                                      final size = MediaQuery.sizeOf(
-                                        dialogContext,
-                                      );
-                                      return HDialog(
-                                        maxWidth: size.width - 32,
-                                        maxHeightFactor: 0.9,
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxWidth: size.width - 72,
-                                            maxHeight: size.height * 0.8,
-                                          ),
-                                          child: Image.network(
-                                            imageUrl,
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: HCard(
-                                  padding: EdgeInsets.zero,
-                                  child: Container(
-                                    height: 300,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                          '$kImageUrl/${post!.featureImage}',
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              HtmlWidget(
-                                post!.content,
-                                onTapUrl: (url) async {
-                                  return await launchUrl(Uri.parse(url));
-                                },
-                              ),
-                              Divider(),
-                              HListItemData(
-                                title: Text('Comments (${comments.length})'),
-                              ),
-                              ...List.generate(
-                                comments.length,
-                                (index) => Container(
-                                  padding: EdgeInsets.symmetric(vertical: 4),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: context.hColors.border,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: .min,
-                                    spacing: 8,
-                                    crossAxisAlignment: .stretch,
-                                    children: [
-                                      HtmlWidget(comments[index].text),
-                                      Text(
-                                        '${comments[index].userId} | ${formatDateStringDDMMMYYYY(comments[index].date)}',
-                                        style: TextStyle(
-                                          color:
-                                              context.hColors.mutedForeground,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              HTextField(
-                                hintText: 'Write your comments here...',
-                                maxLines: 5,
-                              ),
-                              Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isDesktop = constraints.maxWidth > kMobileBreakpoint;
+        return Scaffold(
+          appBar: KpkAppBar(),
+          body: error.isNotEmpty
+              ? Center(child: Text(error))
+              : (post == null || post!.id.isEmpty
+                    ? Center(child: Text('Unable to fetch post!'))
+                    : SingleChildScrollView(
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: kMaxContentWidth,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                crossAxisAlignment: .start,
                                 children: [
-                                  HButton(
-                                    color: .primary,
-                                    onPressed: () {},
-                                    label: Text('Submit'),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      crossAxisAlignment: .stretch,
+                                      spacing: 16,
+                                      children: [
+                                        HListItemData(
+                                          title: Text(
+                                            post!.title,
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: .bold,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            '${post!.categoryName} | ${formatDateStringDDMMMYYYY(post!.modified)}',
+                                          ),
+                                        ),
+                                        InkWell(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          onTap: () {
+                                            final imageUrl =
+                                                '$kImageUrl/${post!.featureImage}';
+                                            showHDialog(
+                                              context,
+                                              builder: (dialogContext) {
+                                                final size = MediaQuery.sizeOf(
+                                                  dialogContext,
+                                                );
+                                                return HDialog(
+                                                  maxWidth: size.width - 32,
+                                                  maxHeightFactor: 0.9,
+                                                  child: ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                      maxWidth: size.width - 72,
+                                                      maxHeight:
+                                                          size.height * 0.8,
+                                                    ),
+                                                    child: Image.network(
+                                                      imageUrl,
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: HCard(
+                                            padding: EdgeInsets.zero,
+                                            child: Container(
+                                              height: 300,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    '$kImageUrl/${post!.featureImage}',
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        HtmlWidget(
+                                          post!.content,
+                                          onTapUrl: (url) async {
+                                            return await launchUrl(
+                                              Uri.parse(url),
+                                            );
+                                          },
+                                        ),
+                                        Divider(),
+                                        HListItemData(
+                                          title: Text(
+                                            'Comments (${comments.length})',
+                                          ),
+                                        ),
+                                        ...List.generate(
+                                          comments.length,
+                                          (index) => Container(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 4,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: context.hColors.border,
+                                                ),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: .min,
+                                              spacing: 8,
+                                              crossAxisAlignment: .stretch,
+                                              children: [
+                                                HtmlWidget(
+                                                  comments[index].text,
+                                                ),
+                                                Text(
+                                                  '${comments[index].userId} | ${formatDateStringDDMMMYYYY(comments[index].date)}',
+                                                  style: TextStyle(
+                                                    color: context
+                                                        .hColors
+                                                        .mutedForeground,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        HTextField(
+                                          hintText:
+                                              'Write your comments here...',
+                                          maxLines: 5,
+                                        ),
+                                        Row(
+                                          children: [
+                                            HButton(
+                                              color: .primary,
+                                              onPressed: () {},
+                                              label: Text('Submit'),
+                                            ),
+                                          ],
+                                        ),
+                                        if (!isDesktop) CategoriesList(),
+                                      ],
+                                    ),
                                   ),
+                                  if (isDesktop)
+                                    Expanded(flex: 1, child: CategoriesList()),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  )),
+                      )),
+        );
+      },
     );
   }
 }

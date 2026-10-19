@@ -61,85 +61,97 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: KpkAppBar(),
-      body: error.isNotEmpty
-          ? Center(child: Text(error))
-          : (isLoading
-                ? Center(
-                    child: SizedBox(width: 100, child: HProgressIndicator()),
-                  )
-                : SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        crossAxisAlignment: .start,
-                        spacing: 8.0,
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              crossAxisAlignment: .stretch,
-                              children: [
-                                if (posts.isNotEmpty)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                      horizontal: 16,
-                                    ),
-                                    child: Text(
-                                      posts[0].categoryName,
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: .bold,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isDesktop = constraints.maxWidth > kMobileBreakpoint;
+        return Scaffold(
+          appBar: KpkAppBar(),
+          body: error.isNotEmpty
+              ? Center(child: Text(error))
+              : (isLoading
+                    ? Center(
+                        child: SizedBox(
+                          width: 100,
+                          child: HProgressIndicator(),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            crossAxisAlignment: .start,
+                            spacing: 8.0,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  crossAxisAlignment: .stretch,
+                                  children: [
+                                    if (posts.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8,
+                                          horizontal: 16,
+                                        ),
+                                        child: Text(
+                                          posts[0].categoryName,
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: .bold,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                HListView.builder(
-                                  itemCount: posts.length,
-                                  itemBuilder: (index) {
-                                    final post = posts[index];
-                                    return HListTile(
-                                      title: Text(post.title),
-                                      subtitle: Text(
-                                        '${post.authorName} | ${formatDateStringDDMMMYYYY(post.modified)}',
-                                      ),
-                                      onTap: () {
-                                        context.go('/post/${post.id}');
+                                    HListView.builder(
+                                      itemCount: posts.length,
+                                      itemBuilder: (index) {
+                                        final post = posts[index];
+                                        return HListTile(
+                                          title: Text(post.title),
+                                          subtitle: Text(
+                                            '${post.authorName} | ${formatDateStringDDMMMYYYY(post.modified)}',
+                                          ),
+                                          onTap: () {
+                                            context.go('/post/${post.id}');
+                                          },
+                                        );
                                       },
-                                    );
-                                  },
+                                    ),
+                                    HPageNavigation(
+                                      pageNr: page,
+                                      totalPages: (totalRecords / kPageSize)
+                                          .ceil(),
+                                      totalRecords: totalRecords,
+                                      onPrevious: () {
+                                        if (page != 0) {
+                                          page--;
+                                          fetchPosts();
+                                        }
+                                      },
+                                      onNext: () {
+                                        if (page <
+                                            (totalRecords / kPageSize).ceil() -
+                                                1) {
+                                          page++;
+                                          fetchPosts();
+                                        }
+                                      },
+                                      onPageSelected: (value) {
+                                        page = value;
+                                        fetchPosts();
+                                      },
+                                    ),
+                                    if (!isDesktop) CategoriesList(),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              if (isDesktop)
+                                Expanded(flex: 1, child: CategoriesList()),
+                            ],
                           ),
-                          HPageNavigation(
-                            pageNr: page,
-                            totalPages: (totalRecords / kPageSize).ceil(),
-                            totalRecords: totalRecords,
-                            onPrevious: () {
-                              if (page != 0) {
-                                page--;
-                                fetchPosts();
-                              }
-                            },
-                            onNext: () {
-                              if (page <
-                                  (totalRecords / kPageSize).ceil() - 1) {
-                                page++;
-                                fetchPosts();
-                              }
-                            },
-                            onPageSelected: (value) {
-                              page = value;
-                              fetchPosts();
-                            },
-                          ),
-                          Expanded(flex: 1, child: CategoriesList()),
-                        ],
-                      ),
-                    ),
-                  )),
+                        ),
+                      )),
+        );
+      },
     );
   }
 }
