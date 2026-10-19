@@ -11,9 +11,10 @@ const kApiUrl = "$kBaseUrl/api";
 const kImageUrl = "$kBaseUrl/uploads";
 
 const kApiEndPoints = {
-  'latest_post': '$kApiUrl/get_latest_posts',
-  'post_by_id': '$kApiUrl/get_post_by_id',
-  'page_links': '$kApiUrl/get_page_links',
+  'latest_post': '$kApiUrl/posts/get_latest_posts',
+  'post_by_id': '$kApiUrl/posts/get_post_by_id',
+  'page_links': '$kApiUrl/pages/get_page_links',
+  'page_content': '$kApiUrl/pages/get_page_content',
   'comment_by_post': '$kApiUrl/comments/get_by_post',
 };
 
