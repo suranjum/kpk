@@ -2,6 +2,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:hornbill/hornbill.dart';
 import 'package:kpk/src/components/app_bar.dart';
 import 'package:kpk/src/helpers/constants.dart';
+import 'package:kpk/src/helpers/date_helper.dart';
 import 'package:kpk/src/models/page.dart';
 import 'package:kpk/src/providers/pages_provider.dart';
 import 'package:material_ui/material_ui.dart';
@@ -18,17 +19,19 @@ class ContentPage extends StatefulWidget {
 class _ContentPageState extends State<ContentPage> {
   List<PageContent> pages = [];
   String error = '';
+  int _fetchGeneration = 0;
 
   Future<void> fetchContent() async {
-    Map<String, dynamic> map = {'page_id': '', 'page_url_slug': widget.urlSlug};
+    final fetchGeneration = ++_fetchGeneration;
+    final urlSlug = widget.urlSlug;
+    final map = {'page_id': '', 'page_url_slug': urlSlug};
     final res = await PagesProvider.getContent(map);
     debugPrint(res.pages.length.toString());
+    if (!mounted || fetchGeneration != _fetchGeneration) return;
+
     setState(() {
-      if (res.error.isEmpty) {
-        pages = res.pages;
-      } else {
-        error = res.error;
-      }
+      pages = res.pages;
+      error = res.error;
     });
   }
 
@@ -36,6 +39,14 @@ class _ContentPageState extends State<ContentPage> {
   void initState() {
     super.initState();
     fetchContent();
+  }
+
+  @override
+  void didUpdateWidget(covariant ContentPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.urlSlug != widget.urlSlug) {
+      fetchContent();
+    }
   }
 
   @override
@@ -62,6 +73,9 @@ class _ContentPageState extends State<ContentPage> {
                                   fontSize: 24,
                                   fontWeight: .bold,
                                 ),
+                              ),
+                              subtitle: Text(
+                                formatDateStringDDMMMYYYY(pages[0].modified),
                               ),
                             ),
                             InkWell(

@@ -64,15 +64,15 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: KpkAppBar(),
-      body: SingleChildScrollView(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: kMaxWidth),
-            child: error.isNotEmpty
-                ? Center(child: Text(error))
-                : (post == null || post!.id.isEmpty
-                      ? Text('Unable to fetch post!')
-                      : Padding(
+      body: error.isNotEmpty
+          ? Center(child: Text(error))
+          : (post == null || post!.id.isEmpty
+                ? Center(child: Text('Unable to fetch post!'))
+                : SingleChildScrollView(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: kMaxWidth),
+                        child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: .stretch,
@@ -187,10 +187,10 @@ class _PostPageState extends State<PostPage> {
                               ),
                             ],
                           ),
-                        )),
-          ),
-        ),
-      ),
+                        ),
+                      ),
+                    ),
+                  )),
     );
   }
 }

@@ -35,7 +35,6 @@ class PagesProvider {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(map),
       );
-      print(response.body);
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         return PageContentResult(
