@@ -59,7 +59,6 @@ class PostsProvider {
         headers: {'Content-Type': 'application/json'},
         body: json.encode(map),
       );
-      print(response.body);
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         return PostResult(

@@ -110,6 +110,15 @@ class _CategoryPageState extends State<CategoryPage> {
                                           subtitle: Text(
                                             '${post.authorName} | ${formatDateStringDDMMMYYYY(post.modified)}',
                                           ),
+                                          suffix: Text(
+                                            '${post.visited} visits',
+                                            style: TextStyle(
+                                              color: context
+                                                  .hColors
+                                                  .mutedForeground,
+                                              fontSize: 12,
+                                            ),
+                                          ),
                                           onTap: () {
                                             context.go('/post/${post.id}');
                                           },

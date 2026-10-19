@@ -24,6 +24,7 @@ class CategoriesList extends StatelessWidget {
           itemBuilder: (index) {
             final cg = categories[index];
             return HListTile(
+              dense: true,
               title: Text(cg.name),
               onTap: () => context.go('/category/${cg.id}'),
             );
