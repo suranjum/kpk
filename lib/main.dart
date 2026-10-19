@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hornbill/hornbill.dart';
 import 'package:kpk/src/helpers/constants.dart';
 import 'package:kpk/src/helpers/globals.dart' as globals;
+import 'package:kpk/src/pages/category_page.dart';
 import 'package:kpk/src/pages/content_page.dart';
 import 'package:kpk/src/pages/home_page.dart';
 import 'package:kpk/src/pages/post_page.dart';
@@ -54,6 +55,13 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           final postId = state.pathParameters['id'];
           return PostPage(postId: postId ?? '');
+        },
+      ),
+      GoRoute(
+        path: '/category/:id',
+        builder: (context, state) {
+          final cgId = state.pathParameters['id'];
+          return CategoryPage(categoryId: cgId ?? '');
         },
       ),
     ],

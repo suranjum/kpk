@@ -13,6 +13,7 @@ const kImageUrl = "$kBaseUrl/uploads";
 const kApiEndPoints = {
   'latest_post': '$kApiUrl/posts/get_latest_posts',
   'post_by_id': '$kApiUrl/posts/get_post_by_id',
+  'post_by_category': '$kApiUrl/posts/get_by_category',
   'page_links': '$kApiUrl/pages/get_page_links',
   'page_content': '$kApiUrl/pages/get_page_content',
   'comment_by_post': '$kApiUrl/comments/get_by_post',

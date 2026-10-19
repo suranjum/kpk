@@ -50,4 +50,28 @@ class PostsProvider {
       return PostResult([], 0, '$e');
     }
   }
+
+  static Future<PostResult> getByCategory(Map<String, dynamic> map) async {
+    try {
+      String url = kApiEndPoints['post_by_category'] ?? kApiUrl;
+      final response = await http.Client().post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(map),
+      );
+      print(response.body);
+      if (response.statusCode == 200) {
+        final parsed = json.decode(response.body);
+        return PostResult(
+          parsed['posts'].map<Post>((json) => Post.fromJson(json)).toList(),
+          parsed['records'],
+          '',
+        );
+      } else {
+        return PostResult([], 0, response.body);
+      }
+    } catch (e) {
+      return PostResult([], 0, '$e');
+    }
+  }
 }
