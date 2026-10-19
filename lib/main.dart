@@ -6,13 +6,14 @@ import 'package:kpk/src/helpers/globals.dart' as globals;
 import 'package:kpk/src/pages/content_page.dart';
 import 'package:kpk/src/pages/home_page.dart';
 import 'package:kpk/src/pages/post_page.dart';
+import 'package:kpk/src/providers/categories_provider.dart';
 import 'package:kpk/src/providers/pages_provider.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
-  await loadPageLinks();
+  await Future.wait([loadPageLinks(), loadCategories()]);
   runApp(MyApp());
 }
 
@@ -20,6 +21,16 @@ Future<void> loadPageLinks() async {
   final result = await PagesProvider.getPageLinks();
   if (result.error.isEmpty) {
     globals.pageLinks = result.pageLinks;
+  } else {
+    debugPrint(result.error);
+  }
+}
+
+Future<void> loadCategories() async {
+  final result = await CategoriesProvider.get({'site_lang': 'ml'});
+  if (result.error.isEmpty) {
+    debugPrint('${result.categories.length} categories');
+    globals.categories = result.categories;
   } else {
     debugPrint(result.error);
   }

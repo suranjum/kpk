@@ -71,7 +71,7 @@ class _PostPageState extends State<PostPage> {
                 : SingleChildScrollView(
                     child: Center(
                       child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: kMaxWidth),
+                        constraints: BoxConstraints(maxWidth: kMaxContentWidth),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(

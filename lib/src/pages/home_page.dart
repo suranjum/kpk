@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:kpk/src/components/app_bar.dart';
+import 'package:kpk/src/components/categories_list.dart';
 import 'package:kpk/src/components/post_card.dart';
 import 'package:kpk/src/helpers/constants.dart';
 import 'package:kpk/src/models/post.dart';
@@ -56,22 +57,15 @@ class _HomePageState extends State<HomePage> {
               )
               .toList(),
         );
-        Widget categoryList = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Categories',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ],
-        );
+
+        Widget categoryList = CategoriesList();
 
         return Scaffold(
           appBar: KpkAppBar(),
           body: SingleChildScrollView(
             child: Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: kMaxWidth),
+                constraints: BoxConstraints(maxWidth: kMaxContentWidth),
                 child: isDesktop
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
