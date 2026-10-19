@@ -6,7 +6,7 @@ const kPageSize = 15;
 const kMobileBreakpoint = 600.0;
 const kMaxContentWidth = 1024.0;
 
-const kBaseUrl = "http://192.168.220.52:3010";
+const kBaseUrl = "https://keralappenkavikal.in/ws";
 const kApiUrl = "$kBaseUrl/api";
 const kImageUrl = "$kBaseUrl/uploads";
 
